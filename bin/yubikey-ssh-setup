@@ -16,12 +16,12 @@ set -o pipefail
 
 SUBKEY_LENGTH=${SUBKEY_LENGTH:=2048}
 SUBKEY_EXPIRE=${SUBKEY_EXPIRE:=0}
-SURNAME=${SURNAME:="Frazelle"}
-GIVENNAME=${GIVENNAME:="Jessie"}
+SURNAME=${SURNAME:="Moon"}
+GIVENNAME=${GIVENNAME:="Alex"}
 EMAIL=${EMAIL:=$GMAIL}
 PUBLIC_KEY_URL=${PUBLIC_KEY_URL:="https://keybase.io/jessie/key.asc"}
 KEYID=${KEYID:=$GPGKEY}
-SEX=${SEX:=F}
+SEX=${SEX:=M}
 
 if [[ -z "$KEYID" ]]; then
 	echo "Set the KEYID env variable."
