@@ -116,13 +116,6 @@ setup_sources() {
 	deb http://repo.linrunner.de/debian sid main
 	EOF
 
-	# add docker apt repo
-	cat <<-EOF > /etc/apt/sources.list.d/docker.list
-	deb https://apt.dockerproject.org/repo debian-buster main
-	deb https://apt.dockerproject.org/repo debian-buster testing
-	deb https://apt.dockerproject.org/repo debian-buster experimental
-	EOF
-
 	# # Create an environment variable for the correct distribution
 	# CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
 	# export CLOUD_SDK_REPO
@@ -151,7 +144,7 @@ setup_sources() {
 	echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
 
 	# Import the vscode public key
-	curl https://packages.microsoft.com/repos/vscode/dists/stable/Release.gpg | apt-key add -
+	curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 
 	# add docker gpg key
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -545,16 +538,16 @@ install_wmapps() {
 
 	# update clickpad settings
 	mkdir -p /etc/X11/xorg.conf.d/
-	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/X11/xorg.conf.d/50-synaptics-clickpad.conf > /etc/X11/xorg.conf.d/50-synaptics-clickpad.conf
+	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/X11/xorg.conf.d/50-synaptics-clickpad.conf > /etc/X11/xorg.conf.d/50-synaptics-clickpad.conf
 
 	# add xorg conf
-	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
+	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
 
 	# get correct sound cards on boot
-	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
+	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
 
 	# pretty fonts
-	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
+	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
 
 	echo "Fonts file setup successfully now run:"
 	echo "	dpkg-reconfigure fontconfig-config"
