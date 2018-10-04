@@ -49,15 +49,15 @@ setup_sources_min() {
 
 	# hack for latest git (don't judge)
 	cat <<-EOF > /etc/apt/sources.list.d/git-core.list
-	deb http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
-	deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu xenial main
+	deb http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main
+	deb-src http://ppa.launchpad.net/git-core/ppa/ubuntu bionic main
 	EOF
 
 	# neovim
-	cat <<-EOF > /etc/apt/sources.list.d/neovim.list
-	deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
-	deb-src http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
-	EOF
+	# cat <<-EOF > /etc/apt/sources.list.d/neovim.list
+	# deb http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
+	# deb-src http://ppa.launchpad.net/neovim-ppa/unstable/ubuntu xenial main
+	# EOF
 
 	# iovisor/bcc-tools
 	cat <<-EOF > /etc/apt/sources.list.d/iovisor.list
@@ -68,7 +68,7 @@ setup_sources_min() {
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24
 
 	# add the neovim ppa gpg key
-	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9DBB0BE9366964F134855E2255F96FCF8231B6DD
+	# apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 9DBB0BE9366964F134855E2255F96FCF8231B6DD
 
 	# add the iovisor/bcc-tools gpg key
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 648A4A16A23015EEF4A66B8E4052245BD4284CDD
@@ -84,23 +84,29 @@ setup_sources() {
 	setup_sources_min;
 
 	cat <<-EOF > /etc/apt/sources.list
-	deb http://httpredir.debian.org/debian buster main contrib non-free
-	deb-src http://httpredir.debian.org/debian/ buster main contrib non-free
+	#Ubuntu Bionic
+	deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted
+	deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
+	deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
+	deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
+	deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
+	deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
 
-	deb http://httpredir.debian.org/debian/ buster-updates main contrib non-free
-	deb-src http://httpredir.debian.org/debian/ buster-updates main contrib non-free
+	deb http://security.ubuntu.com/ubuntu bionic-security main restricted
+	deb http://security.ubuntu.com/ubuntu bionic-security universe
+	deb http://security.ubuntu.com/ubuntu bionic-security multiverse
+	EOF
 
-	deb http://security.debian.org/ buster/updates main contrib non-free
-	deb-src http://security.debian.org/ buster/updates main contrib non-free
-
-	deb http://httpredir.debian.org/debian experimental main contrib non-free
-	deb-src http://httpredir.debian.org/debian experimental main contrib non-free
+	#keepassxc
+	cat <<-EOF > /etc/apt/sources.list.d/keepassxc.list
+	deb http://ppa.launchpad.net/phoerious/keepassxc/ubuntu bionic main 
+	deb-src http://ppa.launchpad.net/phoerious/keepassxc/ubuntu bionic main 
 	EOF
 
 	# yubico
 	cat <<-EOF > /etc/apt/sources.list.d/yubico.list
-	deb http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
-	deb-src http://ppa.launchpad.net/yubico/stable/ubuntu xenial main
+	deb http://ppa.launchpad.net/yubico/stable/ubuntu bionic main
+	deb-src http://ppa.launchpad.net/yubico/stable/ubuntu bionic main
 	EOF
 
 	# tlp: Advanced Linux Power Management
@@ -110,17 +116,28 @@ setup_sources() {
 	deb http://repo.linrunner.de/debian sid main
 	EOF
 
-	# Create an environment variable for the correct distribution
-	CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-	export CLOUD_SDK_REPO
-
-	# Add the Cloud SDK distribution URI as a package source
-	cat <<-EOF > /etc/apt/sources.list.d/google-cloud-sdk.list
-	deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main
+	# add docker apt repo
+	cat <<-EOF > /etc/apt/sources.list.d/docker.list
+	deb https://apt.dockerproject.org/repo debian-buster main
+	deb https://apt.dockerproject.org/repo debian-buster testing
+	deb https://apt.dockerproject.org/repo debian-buster experimental
 	EOF
 
+	# # Create an environment variable for the correct distribution
+	# CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+	# export CLOUD_SDK_REPO
+
+	# # Add the Cloud SDK distribution URI as a package source
+	# echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
+
 	# Import the Google Cloud Platform public key
-	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+	# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+
+	# Add the Cloud SDK for Azure
+	# echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > /etc/apt/sources.list.d/azure-cloud-sdk.list
+
+	# Add the Azure Cloud public key
+	# apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
 
 	# Add the Google Chrome distribution URI as a package source
 	cat <<-EOF > /etc/apt/sources.list.d/google-chrome.list
@@ -130,11 +147,24 @@ setup_sources() {
 	# Import the Google Chrome public key
 	curl https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
 
+	# Add the VS code distribution URI as a package source
+	echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
+
+	# Import the vscode public key
+	curl https://packages.microsoft.com/repos/vscode/dists/stable/Release.gpg | apt-key add -
+
+	# add docker gpg key
+	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
 	# add the yubico ppa gpg key
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 3653E21064B19D134466702E43D5C49532CBA1A9
 
 	# add the tlp apt-repo gpg key
 	apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 6B283E95745A6D903009F7CA641EED65CD4E8809
+	
+	# add the keepassxc gpg key
+	apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv-keys D89C66D0E31FEA2874EBD20561922AB60068FCD6
+
 }
 
 base_min() {
@@ -170,7 +200,6 @@ base_min() {
 		make \
 		mount \
 		net-tools \
-		neovim \
 		ssh \
 		strace \
 		sudo \
@@ -205,7 +234,6 @@ base() {
 		fwupd \
 		fwupdate \
 		gnupg-agent \
-		google-cloud-sdk \
 		iwd \
 		libapparmor-dev \
 		libimobiledevice6 \
@@ -219,6 +247,11 @@ base() {
 		usbmuxd \
 		xclip \
 		xcompmgr \
+		network-manager \
+		google-chrome-stable \
+		keepassxc \
+		code \
+
 		--no-install-recommends
 
 	setup_sudo
@@ -288,9 +321,46 @@ setup_sudo() {
 	echo -e "\\n# tmpfs for downloads\\ntmpfs\\t/home/${TARGET_USER}/Downloads\\ttmpfs\\tnodev,nosuid,size=2G\\t0\\t0" >> /etc/fstab
 }
 
-# install rust
-install_rust() {
-	curl https://sh.rustup.rs -sSf | sh
+# installs docker master
+# and adds necessary items to boot params
+install_docker() {
+	# create docker group
+	sudo groupadd docker
+	sudo gpasswd -a "$TARGET_USER" docker
+
+	# Include contributed completions
+	mkdir -p /etc/bash_completion.d
+	curl -sSL -o /etc/bash_completion.d/docker https://raw.githubusercontent.com/docker/docker-ce/master/components/cli/contrib/completion/bash/docker
+
+
+	# get the binary
+	local tmp_tar=/tmp/docker.tgz
+	local binary_uri="https://download.docker.com/linux/static/edge/x86_64"
+	local docker_version
+	docker_version=$(curl -sSL "https://api.github.com/repos/docker/docker-ce/releases/latest" | jq --raw-output .tag_name)
+	docker_version=${docker_version#v}
+	# local docker_sha256
+	# docker_sha256=$(curl -sSL "${binary_uri}/docker-${docker_version}.tgz.sha256" | awk '{print $1}')
+	(
+	set -x
+	curl -fSL "${binary_uri}/docker-${docker_version}.tgz" -o "${tmp_tar}"
+	# echo "${docker_sha256} ${tmp_tar}" | sha256sum -c -
+	tar -C /usr/local/bin --strip-components 1 -xzvf "${tmp_tar}"
+	rm "${tmp_tar}"
+	docker -v
+	)
+	chmod +x /usr/local/bin/docker*
+
+	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/systemd/system/docker.service > /etc/systemd/system/docker.service
+	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/systemd/system/docker.socket > /etc/systemd/system/docker.socket
+
+	systemctl daemon-reload
+	systemctl enable docker
+
+	# update grub with docker configs and power-saving items
+	sed -i.bak 's/GRUB_CMDLINE_LINUX=""/GRUB_CMDLINE_LINUX="cgroup_enable=memory swapaccount=1 apparmor=1 security=apparmor page_poison=1 slab_nomerge vsyscall=none"/g' /etc/default/grub
+	echo "Docker has been installed. If you want memory management & swap"
+	echo "run update-grub & reboot"
 }
 
 # install/update golang from source
@@ -327,19 +397,20 @@ install_golang() {
 	set -x
 	set +e
 	go get github.com/golang/lint/golint
-	go get golang.org/x/tools/cmd/cover
-	go get golang.org/x/review/git-codereview
-	go get golang.org/x/tools/cmd/goimports
-	go get golang.org/x/tools/cmd/gorename
-	go get golang.org/x/tools/cmd/guru
+	# go get golang.org/x/tools/cmd/cover
+	# go get golang.org/x/review/git-codereview
+	# go get golang.org/x/tools/cmd/goimports
+	# go get golang.org/x/tools/cmd/gorename
+	# go get golang.org/x/tools/cmd/guru
 
-	go get github.com/genuinetools/amicontained
-	go get github.com/genuinetools/apk-file
+	# go get github.com/genuinetools/amicontained
+	# go get github.com/genuinetools/apk-file
 	go get github.com/genuinetools/audit
 	go get github.com/genuinetools/bpfd
 	go get github.com/genuinetools/bpfps
 	go get github.com/genuinetools/certok
-	go get github.com/genuinetools/netns
+	# go get github.com/genuinetools/img
+	# go get github.com/genuinetools/netns
 	go get github.com/genuinetools/pepper
 	go get github.com/genuinetools/reg
 	go get github.com/genuinetools/udict
@@ -352,54 +423,55 @@ install_golang() {
 
 	go get github.com/axw/gocov/gocov
 	go get honnef.co/go/tools/cmd/staticcheck
+	# go get github.com/google/gops
 
 	# Tools for vimgo.
-	go get github.com/jstemmer/gotags
-	go get github.com/nsf/gocode
-	go get github.com/rogpeppe/godef
+	# go get github.com/jstemmer/gotags
+	# go get github.com/nsf/gocode
+	# go get github.com/rogpeppe/godef
 
-	aliases=( Azure/acs-engine genuinetools/contained.af genuinetools/binctr genuinetools/img docker/docker moby/buildkit opencontainers/runc )
-	for project in "${aliases[@]}"; do
-		owner=$(dirname "$project")
-		repo=$(basename "$project")
-		if [[ -d "${HOME}/${repo}" ]]; then
-			rm -rf "${HOME:?}/${repo}"
-		fi
+	# aliases=( genuinetools/contained.af docker/docker moby/buildkit opencontainers/runc jessfraz/binctr )
+	# for project in "${aliases[@]}"; do
+	# 	owner=$(dirname "$project")
+	# 	repo=$(basename "$project")
+	# 	if [[ -d "${HOME}/${repo}" ]]; then
+	# 		rm -rf "${HOME:?}/${repo}"
+	# 	fi
 
-		mkdir -p "${GOPATH}/src/github.com/${owner}"
+	# 	mkdir -p "${GOPATH}/src/github.com/${owner}"
 
-		if [[ ! -d "${GOPATH}/src/github.com/${project}" ]]; then
-			(
-			# clone the repo
-			cd "${GOPATH}/src/github.com/${owner}"
-			git clone "https://github.com/${project}.git"
-			# fix the remote path, since our gitconfig will make it git@
-			cd "${GOPATH}/src/github.com/${project}"
-			git remote set-url origin "https://github.com/${project}.git"
-			)
-		else
-			echo "found ${project} already in gopath"
-		fi
+	# 	if [[ ! -d "${GOPATH}/src/github.com/${project}" ]]; then
+	# 		(
+	# 		# clone the repo
+	# 		cd "${GOPATH}/src/github.com/${owner}"
+	# 		git clone "https://github.com/${project}.git"
+	# 		# fix the remote path, since our gitconfig will make it git@
+	# 		cd "${GOPATH}/src/github.com/${project}"
+	# 		git remote set-url origin "https://github.com/${project}.git"
+	# 		)
+	# 	else
+	# 		echo "found ${project} already in gopath"
+	# 	fi
 
-		# make sure we create the right git remotes
-		if [[ "$owner" != "jessfraz" ]] && [[ "$owner" != "genuinetools" ]]; then
-			(
-			cd "${GOPATH}/src/github.com/${project}"
-			git remote set-url --push origin no_push
-			git remote add jessfraz "https://github.com/jessfraz/${repo}.git"
-			)
-		fi
-	done
+	# 	# make sure we create the right git remotes
+	# 	if [[ "$owner" != "jessfraz" ]]; then
+	# 		(
+	# 		cd "${GOPATH}/src/github.com/${project}"
+	# 		git remote set-url --push origin no_push
+	# 		git remote add jessfraz "https://github.com/jessfraz/${repo}.git"
+	# 		)
+	# 	fi
+	# done
 
 	# do special things for k8s GOPATH
-	mkdir -p "${GOPATH}/src/k8s.io"
-	kubes_repos=( community kubernetes release sig-release )
-	for krepo in "${kubes_repos[@]}"; do
-		git clone "https://github.com/kubernetes/${krepo}.git" "${GOPATH}/src/k8s.io/${krepo}"
-		cd "${GOPATH}/src/k8s.io/${krepo}"
-		git remote set-url --push origin no_push
-		git remote add jessfraz "https://github.com/jessfraz/${krepo}.git"
-	done
+	# mkdir -p "${GOPATH}/src/k8s.io"
+	# kubes_repos=( community kubernetes release test-infra )
+	# for krepo in "${kubes_repos[@]}"; do
+	# 	git clone "https://github.com/kubernetes/${krepo}.git" "${GOPATH}/src/k8s.io/${krepo}"
+	# 	cd "${GOPATH}/src/k8s.io/${krepo}"
+	# 	git remote set-url --push origin no_push
+	# 	git remote add jessfraz "https://github.com/jessfraz/${krepo}.git"
+	# done
 	)
 
 	# symlink weather binary for motd
@@ -473,16 +545,16 @@ install_wmapps() {
 
 	# update clickpad settings
 	mkdir -p /etc/X11/xorg.conf.d/
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/X11/xorg.conf.d/50-synaptics-clickpad.conf > /etc/X11/xorg.conf.d/50-synaptics-clickpad.conf
+	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/X11/xorg.conf.d/50-synaptics-clickpad.conf > /etc/X11/xorg.conf.d/50-synaptics-clickpad.conf
 
 	# add xorg conf
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
+	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
 
 	# get correct sound cards on boot
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
+	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
 
 	# pretty fonts
-	curl -sSL https://raw.githubusercontent.com/jessfraz/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
+	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
 
 	echo "Fonts file setup successfully now run:"
 	echo "	dpkg-reconfigure fontconfig-config"
@@ -499,7 +571,7 @@ get_dotfiles() {
 
 	if [[ ! -d "${HOME}/dotfiles" ]]; then
 		# install dotfiles from repo
-		git clone git@github.com:jessfraz/dotfiles.git "${HOME}/dotfiles"
+		git clone git@github.com:mooonmeister/dotfiles.git "${HOME}/dotfiles"
 	fi
 
 	cd "${HOME}/dotfiles"
@@ -520,44 +592,107 @@ get_dotfiles() {
 	mkdir -p ~/Pictures/Screenshots
 	)
 
-	install_vim;
 }
 
-install_vim() {
-	# create subshell
-	(
-	cd "$HOME"
+# install_vim() {
+# 	# create subshell
+# 	(
+# 	cd "$HOME"
 
-	# install .vim files
-	sudo rm -rf "${HOME}/.vim"
-	git clone --recursive git@github.com:jessfraz/.vim.git "${HOME}/.vim"
-	(
-	cd "${HOME}/.vim"
-	make install
-	)
+# 	# install .vim files
+# 	git clone --recursive git@github.com:jessfraz/.vim.git "${HOME}/.vim"
+# 	ln -snf "${HOME}/.vim/vimrc" "${HOME}/.vimrc"
+# 	sudo ln -snf "${HOME}/.vim" /root/.vim
+# 	sudo ln -snf "${HOME}/.vimrc" /root/.vimrc
 
-	# update alternatives to neovim
-	sudo update-alternatives --install /usr/bin/vi vi "$(which nvim)" 60
-	sudo update-alternatives --config vi
-	sudo update-alternatives --install /usr/bin/vim vim "$(which nvim)" 60
-	sudo update-alternatives --config vim
-	sudo update-alternatives --install /usr/bin/editor editor "$(which nvim)" 60
-	sudo update-alternatives --config editor
+# 	# alias vim dotfiles to neovim
+# 	mkdir -p "${XDG_CONFIG_HOME:=$HOME/.config}"
+# 	ln -snf "${HOME}/.vim" "${XDG_CONFIG_HOME}/nvim"
+# 	ln -snf "${HOME}/.vimrc" "${XDG_CONFIG_HOME}/nvim/init.vim"
+# 	# do the same for root
+# 	sudo mkdir -p /root/.config
+# 	sudo ln -snf "${HOME}/.vim" /root/.config/nvim
+# 	sudo ln -snf "${HOME}/.vimrc" /root/.config/nvim/init.vim
 
-	# install things needed for deoplete for vim
-	sudo apt update || true
+# 	# update alternatives to neovim
+# 	sudo update-alternatives --install /usr/bin/vi vi "$(which nvim)" 60
+# 	sudo update-alternatives --config vi
+# 	sudo update-alternatives --install /usr/bin/vim vim "$(which nvim)" 60
+# 	sudo update-alternatives --config vim
+# 	sudo update-alternatives --install /usr/bin/editor editor "$(which nvim)" 60
+# 	sudo update-alternatives --config editor
 
-	sudo apt install -y \
-		python3-pip \
-		python3-setuptools \
-		--no-install-recommends
+# 	# install things needed for deoplete for vim
+# 	sudo apt update
 
-	pip3 install -U \
-		setuptools \
-		wheel \
-		neovim
-	)
+# 	sudo apt install -y \
+# 		python3-pip \
+# 		python3-setuptools \
+# 		--no-install-recommends
+
+# 	pip3 install -U \
+# 		setuptools \
+# 		wheel \
+# 		neovim
+# 	)
+# }
+
+install_virtualbox() {
+	# check if we need to install libvpx1
+	# PKG_OK=$(dpkg-query -W --showformat='${Status}\n' libvpx1 | grep "install ok installed")
+	# echo "Checking for libvpx1: $PKG_OK"
+	# if [ "" == "$PKG_OK" ]; then
+	# 	echo "No libvpx1. Installing libvpx1."
+	# 	alex_sources=/etc/apt/sources.list.d/alex.list
+	# 	echo "deb http://httpredir.debian.org/debian jessie main contrib non-free" > "$jessie_sources"
+
+	# 	apt update
+	# 	apt install -y -t jessie libvpx1 \
+	# 		--no-install-recommends
+
+	# 	# cleanup the file that we used to install things from jessie
+	# 	rm "$alex_sources"
+	# fi
+
+	echo "deb http://download.virtualbox.org/virtualbox/debian bionic contrib" >> /etc/apt/sources.list.d/virtualbox.list
+
+	curl -sSL https://www.virtualbox.org/download/oracle_vbox.asc | apt-key add -
+
+	apt update
+	apt install -y \
+		virtualbox \
+	--no-install-recommends
 }
+
+install_vagrant() {
+	VAGRANT_VERSION=1.8.1
+
+	# if we are passing the version
+	if [[ ! -z "$1" ]]; then
+		export VAGRANT_VERSION=$1
+	fi
+
+	# check if we need to install virtualbox
+	PKG_OK=$(dpkg-query -W --showformat='${Status}\n' virtualbox | grep "install ok installed")
+	echo "Checking for virtualbox: $PKG_OK"
+	if [ "" == "$PKG_OK" ]; then
+		echo "No virtualbox. Installing virtualbox."
+		install_virtualbox
+	fi
+
+	tmpdir=$(mktemp -d)
+	(
+	cd "$tmpdir"
+	curl -sSL -o vagrant.deb "https://releases.hashicorp.com/vagrant/${VAGRANT_VERSION}/vagrant_${VAGRANT_VERSION}_x86_64.deb"
+	dpkg -i vagrant.deb
+	)
+
+	rm -rf "$tmpdir"
+
+	# install plugins
+	vagrant plugin install vagrant-vbguest
+}
+
 
 usage() {
 	echo -e "install.sh\\n\\tThis script installs my basic setup for a debian laptop\\n"
@@ -567,11 +702,12 @@ usage() {
 	echo "  graphics {intel, geforce, optimus}  - install graphics drivers"
 	echo "  wm                                  - install window manager/desktop pkgs"
 	echo "  dotfiles                            - get dotfiles"
-	echo "  vim                                 - install vim specific dotfiles"
+	# echo "  vim                                 - install vim specific dotfiles"
 	echo "  golang                              - install golang and packages"
 	echo "  rust                                - install rust"
 	echo "  scripts                             - install scripts"
 	echo "  dropbear                            - install and configure dropbear initramfs"
+	echo "  vagrant                             - install vagrant and virtualbox"
 }
 
 main() {
@@ -609,10 +745,10 @@ main() {
 	elif [[ $cmd == "dotfiles" ]]; then
 		get_user
 		get_dotfiles
-	elif [[ $cmd == "vim" ]]; then
-		install_vim
-	elif [[ $cmd == "rust" ]]; then
-		install_rust
+	# elif [[ $cmd == "vim" ]]; then
+	# 	install_vim
+	# elif [[ $cmd == "rust" ]]; then
+	# 	install_rust
 	elif [[ $cmd == "golang" ]]; then
 		install_golang "$2"
 	elif [[ $cmd == "scripts" ]]; then
@@ -623,6 +759,8 @@ main() {
 		get_user
 
 		install_dropbear
+	elif [[ $cmd == "vagrant" ]]; then
+	install_vagrant "$2"
 	else
 		usage
 	fi
