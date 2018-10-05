@@ -12,7 +12,7 @@ set $lockcmd i3lock
 # is used in the bar {} block below.
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:Monospace 10
+font pango:Monospace 8
 
 # HiDPI for sway
 # output eDP-1 scale 1
@@ -191,7 +191,7 @@ bar {
 # set background
 # use the same background as slim (login manager)
 # this file is an alias to something in /home/jessie/Pictures
-exec --no-startup-id feh --bg-fill ${HOME}/Pictures/central-park.jpg
+exec --no-startup-id feh --bg-fill ${HOME}/Pictures/northern-washington.jpg
 
 # Sway backgroud
 # output "*" background ${HOME}/Pictures/central-park2.jpg fill
