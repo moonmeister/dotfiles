@@ -56,8 +56,8 @@ backlight_change()
     [1234567890]|[[1234567890][[1234567890])
         current=$( backlight_get )
         max=$( backlight_get_max )
-        value=$( expr ${change} + 0 )
-        if test ${value} -lt 0 || test ${value} -gt ${max} ; then
+        value=$(( change + 0 ))
+        if test ${value} -lt 0 || test ${value} -gt "${max}" ; then
             echo "Invalid backlight value ${value}."                  \
                 "Should be a number between 0 .. ${max}" >&2
             return 1
@@ -71,7 +71,7 @@ backlight_change()
         current=$( backlight_get )
         max=$( backlight_get_max )
         if test "${current}" -lt "${max}" ; then
-            value=$(( ${current} + 1 ))
+            value=$(( current + 1 ))
             backlight_set "${value}"
             notify-send -t 800 "Keyboard brightness set to ${value}"
         fi
@@ -80,7 +80,7 @@ backlight_change()
     [dD][oO][wW][nN])
         current=$( backlight_get )
         if test "${current}" -gt 0 ; then
-            value=$(( ${current}  - 1 ))
+            value=$(( current - 1 ))
             backlight_set "${value}"
             notify-send -t 800 "Keyboard brightness set to ${value}"
         fi

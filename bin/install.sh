@@ -247,7 +247,6 @@ base() {
 		google-chrome-stable \
 		keepassxc \
 		code \
-
 		--no-install-recommends
 
 	setup_sudo
@@ -295,12 +294,12 @@ setup_sudo() {
 
 	# add user to systemd groups
 	# then you wont need sudo to view logs and shit
-	gpasswd -a $TARGET_USER systemd-journal
-	gpasswd -a $TARGET_USER systemd-network
+	gpasswd -a "$TARGET_USER" systemd-journal
+	gpasswd -a "$TARGET_USER" systemd-network
 
 	# create docker group
 	sudo groupadd docker
-	sudo gpasswd -a $TARGET_USER docker
+	sudo gpasswd -a "$TARGET_USER" docker
 
 	# add go path to secure path
 	{ \
