@@ -1,6 +1,7 @@
 ## dotfiles
 
-[![Travis CI](https://travis-ci.org/jessfraz/dotfiles.svg?branch=master)](https://travis-ci.org/jessfraz/dotfiles)
+[![Build Status](https://img.shields.io/travis/moonmeister/dotfiles.svg?style=for-the-badge&branch=master)](https://travis-ci.org/moonmeister/dotfiles)
+
 
 **To install:**
 
