@@ -87,8 +87,10 @@ setup_sources() {
 	#Ubuntu Bionic
 	deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted
 	deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted
+	
 	deb http://us.archive.ubuntu.com/ubuntu/ bionic universe
 	deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe
+	
 	deb http://us.archive.ubuntu.com/ubuntu/ bionic multiverse
 	deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates multiverse
 
@@ -199,6 +201,7 @@ base_min() {
 		tar \
 		tree \
 		tzdata \
+		rxvt-unicode \
 		unzip \
 		xz-utils \
 		zip \
