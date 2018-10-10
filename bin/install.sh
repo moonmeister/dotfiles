@@ -79,7 +79,7 @@ setup_sources_min() {
 }
 
 # sets up apt sources
-# assumes you are going to use debian buster
+# assumes you are going to use Ubuntu Bionic Beaver
 setup_sources() {
 	setup_sources_min;
 
@@ -292,12 +292,12 @@ setup_sudo() {
 
 	# add user to systemd groups
 	# then you wont need sudo to view logs and shit
-	gpasswd -a "$TARGET_USER" systemd-journal
-	gpasswd -a "$TARGET_USER" systemd-network
+	gpasswd -a $TARGET_USER systemd-journal
+	gpasswd -a $TARGET_USER systemd-network
 
 	# create docker group
 	sudo groupadd docker
-	sudo gpasswd -a "$TARGET_USER" docker
+	sudo gpasswd -a $TARGET_USER docker
 
 	# add go path to secure path
 	{ \
@@ -318,8 +318,13 @@ setup_sudo() {
 # and adds necessary items to boot params
 install_docker() {
 	# create docker group
-	sudo groupadd docker
-	sudo gpasswd -a "$TARGET_USER" docker
+	if grep -q "docker" /etc/group
+		then
+			echo "group exists"
+		else
+			sudo groupadd docker
+			sudo gpasswd -a "$TARGET_USER" docker
+	fi
 
 	# Include contributed completions
 	mkdir -p /etc/bash_completion.d
@@ -344,8 +349,8 @@ install_docker() {
 	)
 	chmod +x /usr/local/bin/docker*
 
-	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/systemd/system/docker.service > /etc/systemd/system/docker.service
-	curl -sSL https://raw.githubusercontent.com/mooonmeister/dotfiles/master/etc/systemd/system/docker.socket > /etc/systemd/system/docker.socket
+	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/systemd/system/docker.service > /etc/systemd/system/docker.service
+	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/systemd/system/docker.socket > /etc/systemd/system/docker.socket
 
 	systemctl daemon-reload
 	systemctl enable docker
@@ -544,7 +549,7 @@ install_wmapps() {
 	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/X11/xorg.conf > /etc/X11/xorg.conf
 
 	# get correct sound cards on boot
-	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
+	# curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/modprobe.d/intel.conf > /etc/modprobe.d/intel.conf
 
 	# pretty fonts
 	curl -sSL https://raw.githubusercontent.com/moonmeister/dotfiles/master/etc/fonts/local.conf > /etc/fonts/local.conf
@@ -701,6 +706,7 @@ usage() {
 	echo "  scripts                             - install scripts"
 	echo "  dropbear                            - install and configure dropbear initramfs"
 	echo "  vagrant                             - install vagrant and virtualbox"
+	echo "  docker                              - install docker"
 }
 
 main() {
@@ -727,6 +733,7 @@ main() {
 		setup_sources_min
 
 		base_min
+		install_docker
 	elif [[ $cmd == "graphics" ]]; then
 		check_is_sudo
 
@@ -754,6 +761,10 @@ main() {
 		install_dropbear
 	elif [[ $cmd == "vagrant" ]]; then
 	install_vagrant "$2"
+	elif [[ $cmd == "docker" ]]; then
+	check_is_sudo
+
+	install_docker
 	else
 		usage
 	fi
