@@ -118,15 +118,19 @@ setup_sources() {
 	deb http://repo.linrunner.de/debian sid main
 	EOF
 
-	# # Create an environment variable for the correct distribution
-	# CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-	# export CLOUD_SDK_REPO
+	# Create an environment variable for the correct distribution
+	CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+	export CLOUD_SDK_REPO
 
-	# # Add the Cloud SDK distribution URI as a package source
-	# echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
+	# Add the Cloud SDK distribution URI as a package source
+	echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list
 
-	# Import the Google Cloud Platform public key
-	# curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+	#Import the Google Cloud Platform public key
+	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+
+	# Add the Cloud SDK for Azure
+	# echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > /etc/apt/sources.list.d/azure-cloud-sdk.list
+
 
 	# Add the Cloud SDK for Azure
 	# echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > /etc/apt/sources.list.d/azure-cloud-sdk.list
@@ -227,15 +231,20 @@ base() {
 		apparmor \
 		bridge-utils \
 		cgroupfs-mount \
+		code \
 		fwupd \
 		fwupdate \
 		gnupg-agent \
+		google-chrome-stable \
+		google-cloud-sdk \
 		iwd \
+		keepassxc \
 		libapparmor-dev \
 		libimobiledevice6 \
 		libltdl-dev \
 		libpam-systemd \
 		libseccomp-dev \
+		network-manager \
 		pinentry-curses \
 		rxvt-unicode-256color \
 		scdaemon \
@@ -243,10 +252,6 @@ base() {
 		usbmuxd \
 		xclip \
 		xcompmgr \
-		network-manager \
-		google-chrome-stable \
-		keepassxc \
-		code \
 		--no-install-recommends
 
 	setup_sudo
