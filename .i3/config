@@ -2,7 +2,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1
+set $mod Mod4
 set $term urxvt
 set $menu i3-dmenu-desktop
 set $barcmd i3status
@@ -12,7 +12,7 @@ set $lockcmd i3lock
 # is used in the bar {} block below.
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:Monospace 10
+font pango:Monospace 8
 
 # HiDPI for sway
 # output eDP-1 scale 1
@@ -133,8 +133,8 @@ bindsym XF86AudioMicMute exec amixer set Capture toggle # mute mic
 # screen brightness controls
 bindsym XF86MonBrightnessUp exec sudo light -A 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec sudo light -U 5 # decrease screen brightness
-bindsym XF86KbdBrightnessUp exec keyboard-backlight up
-bindsym XF86KbdBrightnessDown exec keyboard-backlight down
+# bindsym XF86KbdBrightnessUp exec keyboard-backlight up
+# bindsym XF86KbdBrightnessDown exec keyboard-backlight down
 
 # Screenshots
 # Screenshot fullscreen

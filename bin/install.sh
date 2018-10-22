@@ -237,7 +237,6 @@ base() {
 		gnupg-agent \
 		google-chrome-stable \
 		google-cloud-sdk \
-		iwd \
 		keepassxc \
 		libapparmor-dev \
 		libimobiledevice6 \
