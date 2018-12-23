@@ -97,6 +97,8 @@ setup_sources() {
 	deb http://security.ubuntu.com/ubuntu bionic-security main restricted
 	deb http://security.ubuntu.com/ubuntu bionic-security universe
 	deb http://security.ubuntu.com/ubuntu bionic-security multiverse
+
+
 	EOF
 
 	#keepassxc
@@ -118,6 +120,11 @@ setup_sources() {
 	deb http://repo.linrunner.de/debian sid main
 	EOF
 
+	# Brave Browser
+	cat <<-EOF > /etc/apt/sources.list.d/brave-browser.list
+	deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ bionic main
+	EOF
+
 	# Create an environment variable for the correct distribution
 	CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
 	export CLOUD_SDK_REPO
@@ -128,15 +135,14 @@ setup_sources() {
 	#Import the Google Cloud Platform public key
 	curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
-	# Add the Cloud SDK for Azure
-	# echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > /etc/apt/sources.list.d/azure-cloud-sdk.list
+	#Import brave browser key file
+	curl https://brave-browser-apt-release.s3.brave.com/brave-core.asc | sudo apt-key add -
 
-
 	# Add the Cloud SDK for Azure
-	# echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" > /etc/apt/sources.list.d/azure-cloud-sdk.list
+	echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main" > /etc/apt/sources.list.d/azure-cloud-sdk.list
 
 	# Add the Azure Cloud public key
-	# apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
+	apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893
 
 	# Add the Google Chrome distribution URI as a package source
 	cat <<-EOF > /etc/apt/sources.list.d/google-chrome.list
@@ -149,7 +155,7 @@ setup_sources() {
 	# Add the VS code distribution URI as a package source
 	echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list
 
-	# Import the vscode public key
+	# Import the vscode/microsoft public key
 	curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 
 	# add docker gpg key
@@ -203,6 +209,7 @@ base_min() {
 		strace \
 		sudo \
 		tar \
+		thunderbolt-tools \
 		tree \
 		tzdata \
 		rxvt-unicode \
@@ -229,6 +236,8 @@ base() {
 	apt install -y \
 		alsa-utils \
 		apparmor \
+		brave-browser \
+		brave-keyring \
 		bridge-utils \
 		cgroupfs-mount \
 		code \
@@ -283,6 +292,27 @@ install_dropbear() {
 	echo "Dropbear has been installed and configured."
 	echo "You will now want to update your initramfs:"
 	printf "\\tupdate-initramfs -u\\n"
+}
+
+#Setup azure funcitons
+azurefunctions() {
+
+	#add MS packages
+	wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+	dpkg -i packages-microsoft-prod.deb
+
+	#add package sources
+	sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list'
+	
+	#update apt and install
+	apt-get update
+	apt-get install dotnet-sdk-2.1 azure-functions-core-tools
+
+
+
+
+
+
 }
 
 # setup sudo for a user
@@ -669,7 +699,7 @@ install_virtualbox() {
 }
 
 install_vagrant() {
-	VAGRANT_VERSION=1.8.1
+	VAGRANT_VERSION=2.2.0
 
 	# if we are passing the version
 	if [[ ! -z "$1" ]]; then
@@ -771,6 +801,9 @@ main() {
 	check_is_sudo
 
 	install_docker
+	elif [[ $cmd == "azurefunctions" ]]; then
+	check_is_sudo
+	azurefunctions
 	else
 		usage
 	fi
