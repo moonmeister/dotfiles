@@ -38,3 +38,6 @@ if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
 	GPG_TTY=$(tty)
 	export GPG_TTY
 fi
+
+# Configure GitGet destination
+export CODE_PATH=~/code
