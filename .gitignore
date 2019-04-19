@@ -19,7 +19,7 @@ Session.vim
 .gitconfig
 .gnupg
 !.gnupg/gpg*.conf
-.i3/logfile
+.config/i3/logfile
 .irssi/away.log
 .irssi/config*
 .irssi/nicknames_whitelist

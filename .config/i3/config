@@ -187,8 +187,8 @@ bindsym $mod+t exec yubikey-oath-dmenu --clipboard clipboard --notify
 
 # i3status bar config
 bar {
-	font pango:monospace 10
-	status_command $barcmd --config ~/.i3/status.conf
+        font pango:monospace 12
+        status_command $barcmd --config ~/.config/i3/status.conf
 }
 
 # auto run commands
@@ -196,6 +196,10 @@ bar {
 # use the same background as slim (login manager)
 # this file is an alias to something in /home/jessie/Pictures
 # exec --no-startup-id feh --bg-fill ${HOME}/Pictures/northern-washington.jpg
+
+exec nextcloud-client
+exec nm-applet
+exec blueman-applet
 
 # Sway backgroud
 # output "*" background ${HOME}/Pictures/northern-washington.jpg fill
