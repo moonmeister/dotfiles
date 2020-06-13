@@ -19,7 +19,7 @@ dotfiles: ## Installs the dotfiles.
 	gpg --list-keys || true;
 	ln -sfn $(CURDIR)/.gnupg/gpg.conf $(HOME)/.gnupg/gpg.conf;
 	ln -sfn $(CURDIR)/.gnupg/gpg-agent.conf $(HOME)/.gnupg/gpg-agent.conf;
-	ln -fn $(CURDIR)/gitignore $(HOME)/.gitignore;
+	ln -sfn $(CURDIR)/gitignore $(HOME)/.gitignore;
 	git update-index --skip-worktree $(CURDIR)/.gitconfig;
 	mkdir -p $(HOME)/.config;
 	ln -snf $(CURDIR)/.i3 $(HOME)/.config/sway;
@@ -30,7 +30,7 @@ dotfiles: ## Installs the dotfiles.
 		sudo ln -snf /usr/bin/pinentry /usr/local/bin/pinentry; \
 	fi;
 	mkdir -p $(HOME)/Pictures;
-	ln -snf $(CURDIR)/central-park.jpg $(HOME)/Pictures/central-park.jpg;
+	ln -snf $(CURDIR)/northern-washington.jpg $(HOME)/Pictures/northern-washington.jpg;
 
 .PHONY: etc
 etc: ## Installs the etc directory files.
@@ -38,7 +38,7 @@ etc: ## Installs the etc directory files.
 	for file in $(shell find $(CURDIR)/etc -type f -not -name ".*.swp"); do \
 		f=$$(echo $$file | sed -e 's|$(CURDIR)||'); \
 		sudo mkdir -p $$(dirname $$f); \
-		sudo ln -f $$file $$f; \
+		sudo ln -snf $$file $$f; \
 	done
 	systemctl --user daemon-reload || true
 	sudo systemctl daemon-reload

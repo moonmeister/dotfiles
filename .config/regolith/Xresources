@@ -1,0 +1,5 @@
+
+Xft.dpi: 192
+
+i3-wm.i3xrocks.config: ~/.config/regolith/i3xrocks/config
+i3-wm.bar.config: ~/.config/i3/status.conf

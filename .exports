@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # Make vim the default editor
-export EDITOR=/usr/bin/code;
+export EDITOR=code;
 export TERMINAL="urxvt";
+export BROWSER=/usr/bin/firefox;
 
 # Larger bash history (allow 32³ entries; default is 500)
 export HISTSIZE=50000000;
@@ -26,7 +27,9 @@ export TODOTXT_DEFAULT_ACTION=ls
 # hidpi for gtk apps
 export GDK_SCALE=2
 export GDK_DPI_SCALE=.5
-export QT_DEVICE_PIXEL_RATIO=2
+# export QT_DEVICE_PIXEL_RATIO=2
+
+# export QT_SCALE_FACTOR=1
 
 # turn on go module 
 export GO111MODULE=on

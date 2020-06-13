@@ -1,10 +1,10 @@
-# i3 config file (v4)
+# 2 config file (v4)
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
 set $mod Mod4
 set $term urxvt
-set $menu i3-dmenu-desktop
+set $menu j4-dmenu-desktop
 set $barcmd i3status
 set $lockcmd i3lock
 
@@ -15,15 +15,16 @@ set $lockcmd i3lock
 font pango:Monospace 8
 
 # HiDPI for sway
-# output eDP-1 scale 1
+
+output eDP-1 scale 2
 
 # Inputs for sway
 # Reverse scroll
-#input "2:7:SynPS/2_Synaptics_TouchPad" {
-#    natural_scroll enabled
-#    left_handed disabled
-#    pointer_accel 0.9
-#}
+input "1739:30383:DELL07E6:00_06CB:76AF_Touchpad" {
+    natural_scroll enabled
+    left_handed disabled
+    pointer_accel 0.2
+}
 
 # Before i3 v4.8, we used to recommend this one as the default:
 # font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
